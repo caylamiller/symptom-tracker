@@ -31,8 +31,7 @@ function saveData() {
 }
 
 function fetchHistory() {
-    const url = 'https://script.google.com/macros/s/AKfycbzqpNM_gdaYAhQoXGWfqDmxEfA0piUJJXb6b44F2gmXBGfTPsAymXp_ypQycm2HAA/exec'; // Your Google Apps Script URL
-    fetch(url{
+    fetch(fullUrl, {
         method: 'GET',
         headers: {
             'Origin': 'https://caylamiller.github.io',  // Your GitHub Pages URL
@@ -59,29 +58,29 @@ function fetchHistory() {
         });
 }
 
-function fetchHistory() {
-    fetch(fullUrl)
-    .then(response => response.json())  // Parse the response as JSON
-    .then(data => {
-        const historySection = document.getElementById("history");
-        historySection.innerHTML = "";  // Clear previous history
+// function fetchHistory() {
+//     fetch(fullUrl)
+//     .then(response => response.json())  // Parse the response as JSON
+//     .then(data => {
+//         const historySection = document.getElementById("history");
+//         historySection.innerHTML = "";  // Clear previous history
 
-        // Loop through the data and display each record
-        data.forEach(entry => {
-            const entryElement = document.createElement("div");
-            entryElement.classList.add("history-entry");
+//         // Loop through the data and display each record
+//         data.forEach(entry => {
+//             const entryElement = document.createElement("div");
+//             entryElement.classList.add("history-entry");
 
-            // Format and append the data
-            entryElement.innerHTML = `
-                <p>Date: ${entry.date}</p>
-                <p>Symptom: ${entry.symptom}</p>
-                <p>Score: ${entry.score}</p>
-            `;
-            historySection.appendChild(entryElement);
-        });
-    })
-    .catch(error => console.error("Error fetching history:", error));
-}
+//             // Format and append the data
+//             entryElement.innerHTML = `
+//                 <p>Date: ${entry.date}</p>
+//                 <p>Symptom: ${entry.symptom}</p>
+//                 <p>Score: ${entry.score}</p>
+//             `;
+//             historySection.appendChild(entryElement);
+//         });
+//     })
+//     .catch(error => console.error("Error fetching history:", error));
+// }
 
 // Call the fetchHistory function when the page loads
 window.onload = fetchHistory;
