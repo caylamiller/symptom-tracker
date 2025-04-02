@@ -29,6 +29,36 @@ function saveData() {
     });
     
 }
+
+function fetchHistory() {
+    const url = 'https://script.google.com/macros/s/AKfycbzqpNM_gdaYAhQoXGWfqDmxEfA0piUJJXb6b44F2gmXBGfTPsAymXp_ypQycm2HAA/exec'; // Your Google Apps Script URL
+    fetch(url{
+        method: 'GET',
+        headers: {
+            'Origin': 'https://caylamiller.github.io',  // Your GitHub Pages URL
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch history');
+            }
+            return response.json(); // This should parse the response as JSON
+        })
+        .then(data => {
+            const historyList = document.getElementById('history');
+            historyList.innerHTML = ''; // Clear existing history
+            data.forEach(entry => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${entry.date}: ${entry.symptom} - ${entry.score}`;
+                historyList.appendChild(listItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching history:', error);
+        });
+}
+
 function fetchHistory() {
     fetch(fullUrl)
     .then(response => response.json())  // Parse the response as JSON
