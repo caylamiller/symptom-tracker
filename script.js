@@ -1,4 +1,8 @@
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbzqpNM_gdaYAhQoXGWfqDmxEfA0piUJJXb6b44F2gmXBGfTPsAymXp_ypQycm2HAA/exec"; 
+const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+const apiUrl = 'https://script.google.com/macros/s/AKfycbzqpNM_gdaYAhQoXGWfqDmxEfA0piUJJXb6b44F2gmXBGfTPsAymXp_ypQycm2HAA/exec';
+
+const fullUrl = corsProxy + apiUrl;
 
 function saveData() {
     const date = document.getElementById("date").value;
@@ -10,7 +14,7 @@ function saveData() {
         return;
     }
 
-    fetch(SHEET_URL, {
+    fetch(fullUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ date, symptom, score }),
@@ -26,7 +30,7 @@ function saveData() {
     
 }
 function fetchHistory() {
-    fetch(SHEET_URL)
+    fetch(fullUrl)
     .then(response => response.json())  // Parse the response as JSON
     .then(data => {
         const historySection = document.getElementById("history");
