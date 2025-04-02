@@ -1,92 +1,58 @@
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbzqpNM_gdaYAhQoXGWfqDmxEfA0piUJJXb6b44F2gmXBGfTPsAymXp_ypQycm2HAA/exec"; 
-const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-const apiUrl = 'https://script.google.com/macros/s/AKfycbzqpNM_gdaYAhQoXGWfqDmxEfA0piUJJXb6b44F2gmXBGfTPsAymXp_ypQycm2HAA/exec';
+const scriptUrl = 'https://script.google.com/macros/s/AKfycbzqpNM_gdaYAhQoXGWfqDmxEfA0piUJJXb6b44F2gmXBGfTPsAymXp_ypQycm2HAA/exec';
+const proxyUrl = 'https://cors-anywhere.herokuapp.com/'; // CORS proxy URL
+const fullUrl = proxyUrl + scriptUrl;
 
-const fullUrl = corsProxy + apiUrl;
-
+// Function to save data to Google Sheets
 function saveData() {
-    const date = document.getElementById("date").value;
-    const symptom = document.getElementById("symptom").value;
-    const score = document.getElementById("score").value;
-
+    const date = document.getElementById('date').value;
+    const symptom = document.getElementById('symptom').value;
+    const score = document.getElementById('score').value;
+    
     if (!date || !score) {
         alert("Please select a date and enter a score.");
         return;
     }
 
     fetch(fullUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            'Origin': 'https://caylamiller.github.io', // Your GitHub Pages URL
+            'X-Requested-With': 'XMLHttpRequest'
+        },
         body: JSON.stringify({ date, symptom, score }),
-        mode: "no-cors"
+        mode: 'no-cors'
     })
     .then(() => {
         console.log("Data sent successfully!");
     })
-    .catch(error => {
-        console.error("Error:", error);
-        alert("Failed to save data.");
-    });
-    
+    .catch(error => console.error('Error saving data:', error));
 }
 
-// function fetchHistory() {
-//     fetch(fullUrl, {
-//         method: 'GET',
-//         headers: {
-//             'Origin': 'https://caylamiller.github.io',  // Your GitHub Pages URL
-//             'X-Requested-With': 'XMLHttpRequest'
-//         }
-//     })
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error('Failed to fetch history');
-//             }
-//             return response.json(); // This should parse the response as JSON
-//         })
-//         .then(data => {
-//             const historyList = document.getElementById('history');
-//             historyList.innerHTML = ''; // Clear existing history
-//             data.forEach(entry => {
-//                 const listItem = document.createElement('li');
-//                 listItem.textContent = `${entry.date}: ${entry.symptom} - ${entry.score}`;
-//                 historyList.appendChild(listItem);
-//             });
-//         })
-//         .catch(error => {
-//             console.error('Error fetching history:', error);
-//         });
-// }
-
+// Function to fetch history data from Google Sheets
 function fetchHistory() {
     fetch(fullUrl, {
-            method: 'GET',
-            headers: {
-                'Origin': 'https://caylamiller.github.io',  // Your GitHub Pages URL
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-    .then(response => response.json())  // Parse the response as JSON
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json",
+            'Origin': 'https://caylamiller.github.io',  // Your GitHub Pages URL
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        mode: 'cors' // Change this to 'cors' to enable cross-origin requests
+    })
+    .then(response => response.json())  // Parse the JSON response
     .then(data => {
-        const historySection = document.getElementById("history");
-        historySection.innerHTML = "";  // Clear previous history
+        const historyList = document.getElementById("history");
+        historyList.innerHTML = '';  // Clear previous history
 
-        // Loop through the data and display each record
-        data.forEach(entry => {
-            const entryElement = document.createElement("div");
-            entryElement.classList.add("history-entry");
-
-            // Format and append the data
-            entryElement.innerHTML = `
-                <p>Date: ${entry.date}</p>
-                <p>Symptom: ${entry.symptom}</p>
-                <p>Score: ${entry.score}</p>
-            `;
-            historySection.appendChild(entryElement);
+        data.history.forEach(entry => {
+            const listItem = document.createElement("li");
+            listItem.textContent = `Date: ${entry.date}, Symptom: ${entry.symptom}, Severity: ${entry.score}`;
+            historyList.appendChild(listItem);
         });
     })
-    .catch(error => console.error("Error fetching history:", error));
+    .catch(error => console.error('Error fetching history:', error));
 }
 
-// Call the fetchHistory function when the page loads
+// Load history when the page loads
 window.onload = fetchHistory;
