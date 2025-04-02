@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog Symptom Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Dog Symptom Tracker</h1>
+    <label for="date">Select Date:</label>
+    <input type="date" id="date">
+    
+    <label for="symptom">Select Symptom:</label>
+    <select id="symptom">
+        <option value="appetite">Appetite</option>
+        <option value="energy">Energy</option>
+        <option value="mobility">Mobility</option>
+    </select>
+    
+    <label for="score">Symptom Severity (1-4):</label>
+    <input type="number" id="score" min="1" max="4">
+    
+    <button onclick="saveData()">Save</button>
+    <h2>History</h2>
+    <ul id="history"></ul>
+    
+    <script src="script.js"></script>
+
+    <div id="history">
+        <!-- History data will be populated here -->
+    </div>    
+</body>
+</html>
+
