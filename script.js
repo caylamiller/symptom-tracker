@@ -30,57 +30,63 @@ function saveData() {
     
 }
 
+// function fetchHistory() {
+//     fetch(fullUrl, {
+//         method: 'GET',
+//         headers: {
+//             'Origin': 'https://caylamiller.github.io',  // Your GitHub Pages URL
+//             'X-Requested-With': 'XMLHttpRequest'
+//         }
+//     })
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Failed to fetch history');
+//             }
+//             return response.json(); // This should parse the response as JSON
+//         })
+//         .then(data => {
+//             const historyList = document.getElementById('history');
+//             historyList.innerHTML = ''; // Clear existing history
+//             data.forEach(entry => {
+//                 const listItem = document.createElement('li');
+//                 listItem.textContent = `${entry.date}: ${entry.symptom} - ${entry.score}`;
+//                 historyList.appendChild(listItem);
+//             });
+//         })
+//         .catch(error => {
+//             console.error('Error fetching history:', error);
+//         });
+// }
+
 function fetchHistory() {
     fetch(fullUrl, {
-        method: 'GET',
-        headers: {
-            'Origin': 'https://caylamiller.github.io',  // Your GitHub Pages URL
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch history');
+            method: 'GET',
+            headers: {
+                'Origin': 'https://caylamiller.github.io',  // Your GitHub Pages URL
+                'X-Requested-With': 'XMLHttpRequest'
             }
-            return response.json(); // This should parse the response as JSON
         })
-        .then(data => {
-            const historyList = document.getElementById('history');
-            historyList.innerHTML = ''; // Clear existing history
-            data.forEach(entry => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${entry.date}: ${entry.symptom} - ${entry.score}`;
-                historyList.appendChild(listItem);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching history:', error);
+    .then(response => response.json())  // Parse the response as JSON
+    .then(data => {
+        const historySection = document.getElementById("history");
+        historySection.innerHTML = "";  // Clear previous history
+
+        // Loop through the data and display each record
+        data.forEach(entry => {
+            const entryElement = document.createElement("div");
+            entryElement.classList.add("history-entry");
+
+            // Format and append the data
+            entryElement.innerHTML = `
+                <p>Date: ${entry.date}</p>
+                <p>Symptom: ${entry.symptom}</p>
+                <p>Score: ${entry.score}</p>
+            `;
+            historySection.appendChild(entryElement);
         });
+    })
+    .catch(error => console.error("Error fetching history:", error));
 }
-
-// function fetchHistory() {
-//     fetch(fullUrl)
-//     .then(response => response.json())  // Parse the response as JSON
-//     .then(data => {
-//         const historySection = document.getElementById("history");
-//         historySection.innerHTML = "";  // Clear previous history
-
-//         // Loop through the data and display each record
-//         data.forEach(entry => {
-//             const entryElement = document.createElement("div");
-//             entryElement.classList.add("history-entry");
-
-//             // Format and append the data
-//             entryElement.innerHTML = `
-//                 <p>Date: ${entry.date}</p>
-//                 <p>Symptom: ${entry.symptom}</p>
-//                 <p>Score: ${entry.score}</p>
-//             `;
-//             historySection.appendChild(entryElement);
-//         });
-//     })
-//     .catch(error => console.error("Error fetching history:", error));
-// }
 
 // Call the fetchHistory function when the page loads
 window.onload = fetchHistory;
